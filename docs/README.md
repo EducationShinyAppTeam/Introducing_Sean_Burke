@@ -1,4 +1,5 @@
 # App Title
+Introducing Sean Burke
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/) 
 ![experimental](https://img.shields.io/badge/lifecycle-experimental-orange)
@@ -8,4 +9,4 @@
 ![App Screenshot](../docs/screenshot.png)
 
 # App Description
-Type the description of your app here
+This is a Shiny application to introduce Sean Burke.
