@@ -4,9 +4,16 @@ library(shinydashboard)
 library(shinyBS)
 library(shinyWidgets)
 library(boastUtils)
+library(ggplot2)
 
 # Load additional dependencies and setup functions
 # source("global.R")
+
+# Activity data
+activity <- data.frame(
+  group = c("Gym", "Eating", "Sleep", "Piano", "Tennis", "TV", "Part-Time", "Research"),
+  value = c(1.5,2.5,6,3,1,2,2.5,4)
+)
 
 # Define UI for App ----
 ui <- list(
@@ -57,7 +64,7 @@ ui <- list(
           p("The instructions below provide guidence on how to navigate the app."),
           tags$ol(
             tags$li("Click on the 'Explore' button to learn about Sean."),
-            tags$li("Click on the 'Game' button to go to the Game page."),
+            tags$li("Click on the 'Challenge' button to go to the Challenge page."),
             tags$li("Answer the given multiple choice questions."),
             tags$li("Hit the 'Submit' button to receive score.")
           ),
@@ -65,7 +72,7 @@ ui <- list(
           div(
             style = "text-align: center;",
             bsButton(
-              inputId = "explore1",
+              inputId = "goToExplore",
               label = "Explore!",
               size = "large",
               icon = icon("wpexplorer"),
@@ -110,13 +117,14 @@ ui <- list(
                     src = "profile.png",
                     width = 200,
                     height = 200,
-                    alt = "Picture of Sean"
+                    alt = "Headshot of Sean Burke"
                   ),
+               
                   tags$img(
                     src = "piano.png",
                     width = 350,
                     height = 200,
-                    alt = "picture of Piano"
+                    alt = "Picture of Sean on Piano"
                   )
                 ),
                 br(),
@@ -125,13 +133,36 @@ ui <- list(
                   and Computation route within the major. In his free time, Sean
                   often likes to play sports such as soccer and tennis. In 
                   addition to sports, he also enjoys playing piano. His favorite 
-                  genre to play is Romantic Classcial.")
+                  genre to play is Romantic Classical.")
               ),
               tabPanel(
                 title = "Data Visualization",
                 br(),
                 h3("Data Visualization"),
-                p("[Insert Data Visualization]")
+                fluidRow(
+                  column(
+                    width = 4,
+                    offset = 0,
+                    wellPanel(
+                      selectInput(
+                        inputId = "plotType",
+                        label = "Select a plot",
+                        choices = c("Pie Chart", "Bar Chart")
+                      ),
+                      bsButton(
+                        inputId = "createPlot",
+                        label = "Plot!",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
+                  ),
+                  column(
+                    width = 8,
+                    offset = 0,
+                    plotOutput(outputId = "activityPlot")
+                  )
+                )
               ),
             )
           ),
@@ -139,7 +170,7 @@ ui <- list(
           div(
             style = "text-align: center;",
             bsButton(
-              inputId = "challenge1",
+              inputId = "goToChallenge",
               label = "Challenge!",
               size = "large",
               icon = icon("gears"),
@@ -157,13 +188,34 @@ ui <- list(
           tabName = "challenge",
           withMathJax(),
           h2("Quick Quiz"),
-          p("The general intent of a Challenge page is to have the user take
-            what they learned in an Exploration and apply that knowledge in new
-            contexts/situations. In essence, to have them challenge their
-            understanding by testing themselves."),
-          p("What this page looks like will be up to you. Something you might
-            consider is to re-create the tools of the Exploration page and then
-            a list of questions for the user to then answer.")
+          p("Answer the three multiple choice questions to the best of your ability!"),
+          br(),
+          fluidRow(
+            column(
+              width = 8,
+              offset = 0,
+              wellPanel(
+                tags$figure(
+                  align = "center",
+                  tags$img(
+                    src = "profile.png",
+                    width = 200,
+                    height = 200,
+                    alt = "Headshot of Sean Burke"
+                  )
+                ),
+                br(),
+                p("Question?"),
+                br(),
+                checkboxGroupInput(
+                  inputId = "answerChoice",
+                  label = "Choose One",
+                  choices = c("a","b","c")
+                )
+                
+              )
+            ),
+          )
         ),
         
         #### Set up the References Page ----
@@ -191,7 +243,7 @@ ui <- list(
 
 # Define server logic ----
 server <- function(input, output, session) {
-
+  
   ## Set up Info button ----
   observeEvent(
     eventExpr = input$info,
@@ -205,25 +257,75 @@ server <- function(input, output, session) {
     }
   )
   
-
-  ### Explore button ----
-  observeEvent(input$explore1, {
-    updateTabItems(
-      session = session,
-      inputId = "pages",
-      selected = "explore"
-    )
-  })
-
-  ### Challenge button ----
-  observeEvent(input$challenge1, {
-    updateTabItems(
-      session = session,
-      inputId = "pages",
-      selected = "challenge"
-    )
-  })
   
+  ### Explore button ----
+  observeEvent(
+    eventExpr = input$goToExplore,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "explore"
+      )
+    }
+  )
+  
+ ### Activity Pot ----
+  observeEvent(
+    eventExpr = input$createPlot,
+    handlerExpr = {
+      if (input$plotType == "Pie Chart") {
+        output$activityPlot <- renderPlot(
+          {
+            ggplot(
+              data = activity, 
+              mapping = aes(x="", y=value, fill=group)
+              ) +
+            geom_bar(
+              stat="identity", 
+              width=1, 
+              color="white"
+              ) +
+            coord_polar("y", start=0) +
+            theme_void() + 
+            scale_fill_manual(
+              values = boastUtils::boastPalette
+            )
+          }
+        )
+      } else {
+        output$activityPlot <- renderPlot(
+          {
+            ggplot(
+              data = activity, 
+              mapping = aes(x=group, y=value, fill = group)
+              ) +
+            geom_bar(
+              stat="identity"
+              ) +
+            theme(
+              axis.text.x = element_text(angle = 45, hjust = 1)
+              )+
+            scale_fill_manual(
+              values = boastUtils::boastPalette
+            )
+          }
+        )
+      }
+    }
+  )
+  
+  ### Challenge button ----
+  observeEvent(
+    eventExpr = input$goToChallenge,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "challenge"
+      )
+    }
+  )
 }
 
 # Boast App Call ----
