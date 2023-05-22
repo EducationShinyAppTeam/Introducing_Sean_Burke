@@ -5,13 +5,13 @@ Lifecycle: experimental
 Authors@R: c(
     person(given = "Sean", family = "Burke", email = "sxb6203@psu.edu", role = c("aut", "cre"))
   )
-Chapter: Sample Chapter
+Chapter: Introduction Chapter
 Description: This app is to introduce Sean.
 LearningObjectives: c(
     "The student will learn about Sean."
   )
 DisplayMode: Normal
-URL: https://psu-eberly.shinyapps.io/Sample_App
+URL: https://psu-eberly.shinyapps.io/Introducing_Sean_Burke
 BugReports: https://github.com/EducationShinyAppTeam/Sample_App/issues
 License: CC-BY-NC-SA-4.0
 Tags: introduction app
