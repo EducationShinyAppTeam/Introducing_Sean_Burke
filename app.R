@@ -84,8 +84,7 @@ ui <- list(
           br(),
           h2("Acknowledgements"),
           p(
-            "This version of the app was developed and coded by Neil J.
-            Hatfield  and Robert P. Carey, III.",
+            "This version of the app was developed and coded by Sean Burke",
             br(),
             "We would like to extend a special thanks to the Shiny Program
             Students.",
@@ -96,7 +95,7 @@ ui <- list(
             citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 05/17/2023 by NJH.")
+            div(class = "updated", "Last Update: 05/22/2023 by SB.")
           )
         ),
 
@@ -251,7 +250,7 @@ ui <- list(
                         src = "piano.png",
                         width = 300,
                         height = 200,
-                        alt = "View of Piano"
+                        alt = "Picture of Piano"
                       )
                     ),
                     br(),
@@ -286,6 +285,7 @@ ui <- list(
                 ),
                 br(),
                 br(),
+                br(),
                 bsButton(
                   inputId = "prevPage",
                   label = "Previous!",
@@ -294,17 +294,31 @@ ui <- list(
                  ),
                 br(),
                 br(),
+                br(),
                 bsButton(
-                  inputId = "submitQuiz",
-                  label = "Submit!",
+                  inputId = "resetPage",
+                  label = "Reset!",
                   size = "large",
                   style = "default"
-                )
+                ),
                 
               ),
               
             )
+            
+          ),
+          div(
+            style = "text-align: center;",
+            br(),
+            br(),
+            bsButton(
+              inputId = "submitQuiz",
+              label = "Submit!",
+              size = "large",
+              style = "default"
+            ),
           )
+          
         ),
         
         #### References Page ----
@@ -409,7 +423,8 @@ server <- function(input, output, session) {
             scale_fill_manual(
               values = boastUtils::boastPalette
             )
-          }
+          },
+          alt = "Pie Chart of Activities"
         )
       } else {
         output$activityPlot <- renderPlot(
@@ -429,7 +444,8 @@ server <- function(input, output, session) {
               guide = "none"
               )
               
-          }
+          },
+          alt = "Bar Graph of Activities"
         )
       }
     }
@@ -451,7 +467,6 @@ server <- function(input, output, session) {
   currentQuestion <- reactiveVal(1)
   
   ### Next Button ----
-  
   observeEvent(
     eventExpr = input$nextPage,
     handlerExpr = {
@@ -507,8 +522,60 @@ server <- function(input, output, session) {
       )
       
       currentScore(currentScore() - currentScore())
+      updateTabsetPanel(
+        session = session,
+        inputId = "quiz",
+        selected = paste0("Q1")
+      )
+      resetQuiz()
     }
   )
+  
+  ## Quiz Reset Function ----
+  
+  resetQuiz <- function() {
+    updateRadioButtons(
+      session = session,
+      inputId = "answerChoice1",
+      label = "Looking at the Data Visualization on the Explore 
+                      page, what activity does Sean spend the most time on?",
+      br(),
+      choices = c("Tennis","Sleep","Piano")
+    )
+    
+    updateRadioButtons(
+      session = session,
+      inputId = "answerChoice2",
+      label = "Looking at the Data Visualization on the Explore 
+                      page, what activity does Sean spend the second-to-least time on?",
+      br(),
+      choices = c("Gym","Tennis","Sleep")
+    )
+    
+    updateRadioButtons(
+      session = session,
+      inputId = "answerChoice3", 
+      label = "According to the description on the Explore page,
+                      what is Sean majoring in?",
+      br(),
+      choices = c("Mathematics","Piano Performance","Statistics")
+    )
+    
+  }
+    
+  ### Reset Button ----
+  observeEvent(
+    eventExpr = input$resetPage,
+    handlerExpr = {
+      updateTabsetPanel(
+        session = session,
+        inputId = "quiz",
+        selected = paste0("Q1")
+      )
+        resetQuiz() 
+    }
+  )
+  
 }
 
 # Boast App Call ----
