@@ -9,7 +9,7 @@ library(ggplot2)
 # Load additional dependencies and setup functions
 # source("global.R")
 
-# Activity data
+# Activity data ----
 activity <- data.frame(
   group = c("Gym", "Eating", "Sleep", "Piano", "Tennis", "TV", "Part-Time", "Research"),
   value = c(1.5,2.5,6,3,1,2,2.5,4)
@@ -17,10 +17,10 @@ activity <- data.frame(
 
 # Define UI for App ----
 ui <- list(
-  ## Create the app page ----
+  ## app page ----
   dashboardPage(
     skin = "blue",
-    ### Create the app header ----
+    ### app header ----
     dashboardHeader(
       title = "Introduce Sean", # You may use a shortened form of the title here
       titleWidth = 250,
@@ -309,6 +309,8 @@ server <- function(input, output, session) {
             scale_fill_manual(
               values = boastUtils::boastPalette
             )
+              )
+              
           }
         )
       }
@@ -324,6 +326,69 @@ server <- function(input, output, session) {
         inputId = "pages",
         selected = "challenge"
       )
+    }
+  )
+  
+  # Current Question Counter----
+  currentQuestion <- reactiveVal(1)
+  
+  ### Next Button ----
+  
+  observeEvent(
+    eventExpr = input$nextPage,
+    handlerExpr = {
+      if (currentQuestion() != 3) {
+        currentQuestion(currentQuestion()+1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q",currentQuestion())
+        )
+      }
+    }
+  )
+  
+  ### Previous Button ----
+  
+  observeEvent(
+    eventExpr = input$prevPage,
+    handlerExpr = {
+      if (currentQuestion() != 1) {
+        currentQuestion(currentQuestion()-1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q",currentQuestion())
+        )
+      }
+    }
+  )
+  
+  #Current Score for the Quiz----
+  currentScore <- reactiveVal(0)
+  
+  ### Submit Button ----
+  observeEvent(
+    eventExpr = input$submitQuiz,
+    handlerExpr = {
+      if (!is.null(input$answerChoice1) && input$answerChoice1 == "Sleep") {
+        currentScore(currentScore() + 1)
+      }
+      if (!is.null(input$answerChoice2) && input$answerChoice2 == "Gym") {
+        currentScore(currentScore() + 1)
+      }
+      if (!is.null(input$answerChoice3) && input$answerChoice3 == "Statistics") {
+        currentScore(currentScore() + 1)
+      }
+      
+      sendSweetAlert(
+        session = session,
+        type = "success",
+        title = "Quiz Complete!",
+        text = paste0("Your Score: ", currentScore(), "/3")
+      )
+      
+      currentScore(currentScore() - currentScore())
     }
   )
 }
