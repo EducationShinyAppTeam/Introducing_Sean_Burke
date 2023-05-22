@@ -1,5 +1,5 @@
 # Things Needed for This Version
-1. Quick Quiz
+1. Work on Reset Button for quick quiz
 2. Clean Up
 
 # Ideas for Future Development
