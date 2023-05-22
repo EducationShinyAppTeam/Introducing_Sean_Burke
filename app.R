@@ -36,7 +36,7 @@ ui <- list(
         )
       )
     ),
-    ### Create the sidebar/left navigation menu ----
+    ### Sidebar/left navigation menu ----
     dashboardSidebar(
       width = 250,
       sidebarMenu(
@@ -54,7 +54,7 @@ ui <- list(
     ### Create the content ----
     dashboardBody(
       tabItems(
-        #### Set up the Overview Page ----
+        #### Overview Page ----
         tabItem(
           tabName = "overview",
           withMathJax(),
@@ -100,7 +100,7 @@ ui <- list(
           )
         ),
 
-        #### Set up an Explore Page ----
+        #### Explore Page ----
         tabItem(
           tabName = "explore",
           h2("About Sean Burke"),
@@ -183,7 +183,7 @@ ui <- list(
    
             
         
-        #### Set up a Challenge Page ----
+        #### Challenge Page ----
         tabItem(
           tabName = "challenge",
           withMathJax(),
@@ -192,44 +192,162 @@ ui <- list(
           br(),
           fluidRow(
             column(
-              width = 8,
+              width = 7,
               offset = 0,
               wellPanel(
-                tags$figure(
-                  align = "center",
-                  tags$img(
-                    src = "profile.png",
-                    width = 200,
-                    height = 200,
-                    alt = "Headshot of Sean Burke"
+                tabsetPanel(
+                  id = "quiz",
+                  type = "hidden",
+                  tabPanel(
+                    title = "First Question",
+                    value = paste0("Q1"),
+                    tags$figure(
+                      align = "center",
+                      tags$img(
+                        src = "vis.png",
+                        width = 300,
+                        height = 200,
+                        alt = "View of Visualization Tab"
+                      )
+                    ),
+                    br(),
+                    h3("Question 1"),
+                    radioButtons(
+                      inputId = "answerChoice1",
+                      label = "Looking at the Data Visualization on the Explore 
+                      page, what activity does Sean spend the most time on?",
+                      br(),
+                      choices = c("Tennis","Sleep","Piano")
+                    )
+                  ),
+                  tabPanel(
+                    title = "Second Question",
+                    value = "Q2",
+                    tags$figure(
+                      align = "center",
+                      tags$img(
+                        src = "vis.png",
+                        width = 300,
+                        height = 200,
+                        alt = "View of Visualization Tab"
+                      )
+                    ),
+                    br(),
+                    h3("Question 2"),
+                    radioButtons(
+                      inputId = "answerChoice2",
+                      label = "Looking at the Data Visualization on the Explore 
+                      page, what activity does Sean spend the second-to-least time on?",
+                      br(),
+                      choices = c("Gym","Tennis","Sleep")
+                    )
+                  ),
+                  tabPanel(
+                    title = "Third Question",
+                    value = "Q3",
+                    tags$figure(
+                      align = "center",
+                      tags$img(
+                        src = "piano.png",
+                        width = 300,
+                        height = 200,
+                        alt = "View of Piano"
+                      )
+                    ),
+                    br(),
+                    h3("Question 3"),
+                    radioButtons(
+                      inputId = "answerChoice3",
+                      label = "According to the description on the Explore page,
+                      what is Sean majoring in?",
+                      br(),
+                      choices = c("Mathematics","Piano Performance","Statistics")
+                    )
                   )
-                ),
-                br(),
-                p("Question?"),
-                br(),
-                checkboxGroupInput(
-                  inputId = "answerChoice",
-                  label = "Choose One",
-                  choices = c("a","b","c")
                 )
-                
               )
             ),
+            column(
+              width = 5,
+              offset = 0,
+              div(
+                style = "text-align: center;",
+                br(),
+                br(),
+                br(),
+                br(),
+                br(),
+                br(),
+                bsButton(
+                  inputId = "nextPage",
+                  label = "Next!",
+                  size = "large",
+                  style = "default"
+                ),
+                br(),
+                br(),
+                bsButton(
+                  inputId = "prevPage",
+                  label = "Previous!",
+                  size = "large",
+                  style = "default"
+                 ),
+                br(),
+                br(),
+                bsButton(
+                  inputId = "submitQuiz",
+                  label = "Submit!",
+                  size = "large",
+                  style = "default"
+                )
+                
+              ),
+              
+            )
           )
         ),
         
-        #### Set up the References Page ----
+        #### References Page ----
         tabItem(
           tabName = "references",
           withMathJax(),
           h2("References"),
-          p("You'll need to fill in this page with all of the appropriate
-            references for your app."),
           p(
             class = "hangingindent",
             "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
             https://CRAN.R-project.org/package=shinyBS"
+          ),
+          p(
+            class = "hangingindent",
+            "Carey, R. and Hatfield., N. J. (2023). boastUtils: BOAST utilities.
+            (v0.1.11.2). [R Package]. Available from
+            https://github.com/EducationShinyappTeam/boastUtils"
+          ),
+          p(
+            class = "hangingindent",
+            "Chang, W. and Borges Ribeio, B. (2021). shinydashboard: Create dashboards
+            with 'Shiny'. (v0.7.2). [R Package]. Available from
+            https://CRAN.R-project.org/package=shinydashboard"
+          ),
+          p(
+            class = "hangingindent",
+            "Chang, W., Cheng, J., Allaire, J.J., Sievert, C., Schloerke, B.,
+            Xie, Y., Allen, J., McPherson, J., Dipert, A., and Borges, B. (2022).
+            shiny: Web application framework for R. (v1.7.4). [R Package].
+            Available from https://CRAN.R-project.org/package=shiny"
+          ),
+          p(
+            class = "hangingindent",
+            "Perrier, V., Meyer, F., and Granjon, D. (2023). shinyWidgets: Custom
+            inputs widgets for shiny. (v0.7.6). [R Package]. Availble from
+            https://CRAN.R-project.org/package=shinyWidgets"
+          ),
+          p(
+            class = "hangingindent",
+            "Wickham, H. (2016). ggplot2: Elegant graphics for data analysis.
+            (v3.4.2). [R Package]. New York:Springer-Verlag. Available from
+            https://ggplot2.tidyverse.org"
           ),
           br(),
           br(),
@@ -307,8 +425,8 @@ server <- function(input, output, session) {
               axis.text.x = element_text(angle = 45, hjust = 1)
               )+
             scale_fill_manual(
-              values = boastUtils::boastPalette
-            )
+              values = boastUtils::boastPalette,
+              guide = "none"
               )
               
           }
