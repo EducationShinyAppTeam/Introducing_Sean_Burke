@@ -3,8 +3,7 @@ ShortName: Introducing Sean
 Date: 2023-05-17
 Lifecycle: experimental
 Authors@R: c(
-    person(given = "Neil", family = "Hatfield", email = "neil.hatfield@psu.edu", role = c("aut", "cre")),
-    person(given = "Sean", family = "Burke", email = "sxb6203@psu.edu", role = c("aut"))
+    person(given = "Sean", family = "Burke", email = "sxb6203@psu.edu", role = c("aut", "cre"))
   )
 Chapter: Sample Chapter
 Description: This app is to introduce Sean.
@@ -15,5 +14,5 @@ DisplayMode: Normal
 URL: https://psu-eberly.shinyapps.io/Sample_App
 BugReports: https://github.com/EducationShinyAppTeam/Sample_App/issues
 License: CC-BY-NC-SA-4.0
-Tags: simulation
+Tags: introduction app
 Type: Shiny
