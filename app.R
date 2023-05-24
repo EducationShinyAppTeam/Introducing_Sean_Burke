@@ -306,13 +306,15 @@ ui <- list(
             br(),
             bsButton(
               inputId = "prevPage",
-              label =  "<<< Previous!",
+              icon = icon("backward"),
+              label =  "Previous!",
               size = "large",
               style = "default"
             ),
             bsButton(
               inputId = "nextPage",
-              label =  "Next! >>>",
+              label =  "Next!",
+              icon = icon("forward"),
               size = "large",
               style = "default"
           )
