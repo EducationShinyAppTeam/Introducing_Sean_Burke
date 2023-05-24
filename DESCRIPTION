@@ -12,7 +12,7 @@ LearningObjectives: c(
   )
 DisplayMode: Normal
 URL: https://psu-eberly.shinyapps.io/Introducing_Sean_Burke
-BugReports: https://github.com/EducationShinyAppTeam/Sample_App/issues
+BugReports: https://github.com/EducationShinyAppTeam/Introducing_Sean_Burke/issues
 License: CC-BY-NC-SA-4.0
 Tags: introduction app
 Type: Shiny

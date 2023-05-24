@@ -66,7 +66,8 @@ ui <- list(
             tags$li("Click on the 'Explore' button to learn about Sean."),
             tags$li("Click on the 'Challenge' button to go to the Challenge page."),
             tags$li("Answer the given multiple choice questions."),
-            tags$li("Hit the 'Submit' button to receive score.")
+            tags$li("Hit the 'Submit' button after answering all the questions to 
+                    receive score.")
           ),
           ##### Go Button--location will depend on your goals
           div(
@@ -236,7 +237,8 @@ ui <- list(
                     radioButtons(
                       inputId = "answerChoice2",
                       label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the second-to-least time on?",
+                      page, what activity does Sean spend the second-to-least time 
+                      on?",
                       br(),
                       choices = c("Gym","Tennis","Sleep")
                     )
@@ -278,29 +280,20 @@ ui <- list(
                 br(),
                 br(),
                 bsButton(
-                  inputId = "nextPage",
-                  label = "Next!",
-                  size = "large",
-                  style = "default"
-                ),
-                br(),
-                br(),
-                br(),
-                bsButton(
-                  inputId = "prevPage",
-                  label = "Previous!",
-                  size = "large",
-                  style = "default"
-                 ),
-                br(),
-                br(),
-                br(),
-                bsButton(
                   inputId = "resetPage",
                   label = "Reset!",
                   size = "large",
                   style = "default"
                 ),
+                br(),
+                br(),
+                br(),
+                bsButton(
+                  inputId = "submitQuiz",
+                  label = "Submit!",
+                  size = "large",
+                  style = "default"
+                )
                 
               ),
               
@@ -308,17 +301,23 @@ ui <- list(
             
           ),
           div(
-            style = "text-align: center;",
+            style = "text-align: left;",
             br(),
             br(),
             bsButton(
-              inputId = "submitQuiz",
-              label = "Submit!",
+              inputId = "prevPage",
+              label =  "<<< Previous!",
               size = "large",
               style = "default"
             ),
+            bsButton(
+              inputId = "nextPage",
+              label =  "Next! >>>",
+              size = "large",
+              style = "default"
           )
           
+        )
         ),
         
         #### References Page ----
@@ -422,7 +421,12 @@ server <- function(input, output, session) {
             theme_void() + 
             scale_fill_manual(
               values = boastUtils::boastPalette
-            )
+            ) + 
+            geom_text(
+              aes(label = value), 
+              position = position_stack(vjust = 0.5), 
+              color = "white"
+              )
           },
           alt = "Pie Chart of Activities"
         )
@@ -504,30 +508,40 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitQuiz,
     handlerExpr = {
-      if (!is.null(input$answerChoice1) && input$answerChoice1 == "Sleep") {
-        currentScore(currentScore() + 1)
-      }
-      if (!is.null(input$answerChoice2) && input$answerChoice2 == "Gym") {
-        currentScore(currentScore() + 1)
-      }
-      if (!is.null(input$answerChoice3) && input$answerChoice3 == "Statistics") {
-        currentScore(currentScore() + 1)
+      if (is.null(input$answerChoice1) | is.null(input$answerChoice2) |
+          is.null(input$answerChoice3) ) {
+        sendSweetAlert(
+          session = session,
+          type = "warning",
+          title = "Quiz Incomplete!",
+          text = "Please finish the quiz before submitting!"
+      
+        )
+        
+      } else {
+        
+        if (!is.null(input$answerChoice1) && input$answerChoice1 == "Sleep") {
+          currentScore(currentScore() + 1)
+        }
+        if (!is.null(input$answerChoice2) && input$answerChoice2 == "Gym") {
+          currentScore(currentScore() + 1)
+        }
+        if (!is.null(input$answerChoice3) && input$answerChoice3 == "Statistics") {
+          currentScore(currentScore() + 1)
+        }
+        
+        sendSweetAlert(
+          session = session,
+          type = "success",
+          title = "Quiz Complete!",
+          text = paste0("Your Score: ", currentScore(), "/3")
+        )
+        
+        currentScore(currentScore() - currentScore())
+        resetQuiz()
+        
       }
       
-      sendSweetAlert(
-        session = session,
-        type = "success",
-        title = "Quiz Complete!",
-        text = paste0("Your Score: ", currentScore(), "/3")
-      )
-      
-      currentScore(currentScore() - currentScore())
-      updateTabsetPanel(
-        session = session,
-        inputId = "quiz",
-        selected = paste0("Q1")
-      )
-      resetQuiz()
     }
   )
   
@@ -547,7 +561,8 @@ server <- function(input, output, session) {
       session = session,
       inputId = "answerChoice2",
       label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the second-to-least time on?",
+                      page, what activity does Sean spend the second-to-least 
+      time on?",
       br(),
       choices = c("Gym","Tennis","Sleep")
     )
@@ -560,6 +575,13 @@ server <- function(input, output, session) {
       br(),
       choices = c("Mathematics","Piano Performance","Statistics")
     )
+    currentQuestion(1)
+    updateTabsetPanel(
+      session = session,
+      inputId = "quiz",
+      selected = paste0("Q",currentQuestion())
+    )
+    
     
   }
     
@@ -567,12 +589,9 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$resetPage,
     handlerExpr = {
-      updateTabsetPanel(
-        session = session,
-        inputId = "quiz",
-        selected = paste0("Q1")
-      )
-        resetQuiz() 
+      
+      resetQuiz() 
+      
     }
   )
   
