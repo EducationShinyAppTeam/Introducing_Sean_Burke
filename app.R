@@ -96,7 +96,7 @@ ui <- list(
             citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 05/22/2023 by SB.")
+            div(class = "updated", "Last Update: 05/24/2023 by SB.")
           )
         ),
 
