@@ -22,7 +22,7 @@ ui <- list(
     skin = "blue",
     ### app header ----
     dashboardHeader(
-      title = "Introduce Sean", # You may use a shortened form of the title here
+      title = "Introduce Sean",
       titleWidth = 250,
       tags$li(class = "dropdown", actionLink("info", icon("info"))),
       tags$li(
@@ -69,26 +69,23 @@ ui <- list(
             tags$li("Hit the 'Submit' button after answering all the questions to 
                     receive score.")
           ),
-          ##### Go Button--location will depend on your goals
           div(
             style = "text-align: center;",
             bsButton(
               inputId = "goToExplore",
               label = "Explore!",
               size = "large",
-              icon = icon("wpexplorer"),
+              icon = icon("bolt"),
               style = "default"
             )
           ),
-          ##### Create two lines of space
           br(),
           br(),
           h2("Acknowledgements"),
           p(
             "This version of the app was developed and coded by Sean Burke",
             br(),
-            "We would like to extend a special thanks to the Shiny Program
-            Students.",
+            br(),
             br(),
             br(),
             "Cite this app as:",
@@ -99,32 +96,31 @@ ui <- list(
             div(class = "updated", "Last Update: 05/24/2023 by SB.")
           )
         ),
-
         #### Explore Page ----
         tabItem(
           tabName = "explore",
           h2("About Sean Burke"),
           fluidPage(
             tabsetPanel(
-              #First tab -
+              #####First tab ----
               tabPanel(
                 title = "Basic Info",
                 br(),
                 h3("Information"),
                 tags$figure(
-                  align = "left",
+                  align = "center",
                   tags$img(
                     src = "profile.png",
-                    width = 200,
-                    height = 200,
+                    width = "50%", #add percentage
                     alt = "Headshot of Sean Burke"
-                  ),
-               
+                  )
+                ),
+                tags$figure(
+                  align = "center",
                   tags$img(
                     src = "piano.png",
-                    width = 350,
-                    height = 200,
-                    alt = "Picture of Sean on Piano"
+                    width = "50%",
+                    alt = "Sean playing the Piano"
                   )
                 ),
                 br(),
@@ -173,16 +169,11 @@ ui <- list(
               inputId = "goToChallenge",
               label = "Challenge!",
               size = "large",
-              icon = icon("gears"),
+              icon = icon("bolt"),
               style = "default"
             )
           ),
         ),
-      
-        
-   
-            
-        
         #### Challenge Page ----
         tabItem(
           tabName = "challenge",
@@ -192,7 +183,7 @@ ui <- list(
           br(),
           fluidRow(
             column(
-              width = 7,
+              width = 5,
               offset = 0,
               wellPanel(
                 tabsetPanel(
@@ -200,38 +191,20 @@ ui <- list(
                   type = "hidden",
                   tabPanel(
                     title = "First Question",
-                    value = paste0("Q1"),
-                    tags$figure(
-                      align = "center",
-                      tags$img(
-                        src = "vis.png",
-                        width = 300,
-                        height = 200,
-                        alt = "View of Visualization Tab"
-                      )
-                    ),
+                    value = "Q1",
                     br(),
                     h3("Question 1"),
                     radioButtons(
                       inputId = "answerChoice1",
-                      label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the most time on?",
-                      br(),
-                      choices = c("Tennis","Sleep","Piano")
+                      label = "Looking at the Data Visualization on the Explore
+                      page, what activity does Sean spend the most time on?", #dont put questions in label. put in parg.
+                      choices = c("Tennis", "Sleep", "Piano"),
+                      selected = character(0)
                     )
                   ),
                   tabPanel(
                     title = "Second Question",
                     value = "Q2",
-                    tags$figure(
-                      align = "center",
-                      tags$img(
-                        src = "vis.png",
-                        width = 300,
-                        height = 200,
-                        alt = "View of Visualization Tab"
-                      )
-                    ),
                     br(),
                     h3("Question 2"),
                     radioButtons(
@@ -239,66 +212,43 @@ ui <- list(
                       label = "Looking at the Data Visualization on the Explore 
                       page, what activity does Sean spend the second-to-least time 
                       on?",
-                      br(),
-                      choices = c("Gym","Tennis","Sleep")
+                      choices = c("Gym", "Tennis", "Sleep"),
+                      selected = character(0)
                     )
                   ),
                   tabPanel(
                     title = "Third Question",
                     value = "Q3",
-                    tags$figure(
-                      align = "center",
-                      tags$img(
-                        src = "piano.png",
-                        width = 300,
-                        height = 200,
-                        alt = "Picture of Piano"
-                      )
-                    ),
                     br(),
                     h3("Question 3"),
                     radioButtons(
                       inputId = "answerChoice3",
                       label = "According to the description on the Explore page,
                       what is Sean majoring in?",
-                      br(),
-                      choices = c("Mathematics","Piano Performance","Statistics")
+                      choices = c("Mathematics", "Piano Performance", "Statistics"),
+                      selected = character(0)
                     )
                   )
                 )
               )
             ),
             column(
-              width = 5,
+              width = 7,
               offset = 0,
               div(
-                style = "text-align: center;",
-                br(),
-                br(),
-                br(),
-                br(),
-                br(),
-                br(),
-                bsButton(
-                  inputId = "resetPage",
-                  label = "Reset!",
-                  size = "large",
-                  style = "default"
+                tags$figure(
+                  align = "center",
+                  tags$img(
+                    src = "vis.png",
+                    width = "75%",
+                    alt = "View of Visualization Tab"
+                  )
                 ),
                 br(),
-                br(),
-                br(),
-                bsButton(
-                  inputId = "submitQuiz",
-                  label = "Submit!",
-                  size = "large",
-                  style = "default"
-                )
-                
+                h3("Question #"),
+                p("question text")
               ),
-              
             )
-            
           ),
           div(
             style = "text-align: left;",
@@ -317,11 +267,15 @@ ui <- list(
               icon = icon("forward"),
               size = "large",
               style = "default"
+            ),
+            bsButton(
+              inputId = "submitQuiz",
+              label = "Submit!",
+              size = "large",
+              style = "default"
+            )
           )
-          
-        )
         ),
-        
         #### References Page ----
         tabItem(
           tabName = "references",
@@ -390,7 +344,6 @@ server <- function(input, output, session) {
     }
   )
   
-  
   ### Explore button ----
   observeEvent(
     eventExpr = input$goToExplore,
@@ -409,17 +362,17 @@ server <- function(input, output, session) {
     handlerExpr = {
       if (input$plotType == "Pie Chart") {
         output$activityPlot <- renderPlot(
-          {
+          expr = {
             ggplot(
               data = activity, 
-              mapping = aes(x="", y=value, fill=group)
+              mapping = aes(x = "", y = value, fill = group)
               ) +
             geom_bar(
-              stat="identity", 
-              width=1, 
-              color="white"
+              stat = "identity", 
+              width = 1, 
+              color = "white"
               ) +
-            coord_polar("y", start=0) +
+            coord_polar("y", start = 0) +
             theme_void() + 
             scale_fill_manual(
               values = boastUtils::boastPalette
@@ -428,30 +381,33 @@ server <- function(input, output, session) {
               aes(label = value), 
               position = position_stack(vjust = 0.5), 
               color = "white"
+              ) +
+            theme(
+              text = element_text(size = 18)
               )
           },
-          alt = "Pie Chart of Activities"
+          alt = "Pie Chart of Activities" #Add break down instead to be more descriptive
         )
       } else {
         output$activityPlot <- renderPlot(
-          {
+          expr = {
             ggplot(
               data = activity, 
-              mapping = aes(x=group, y=value, fill = group)
+              mapping = aes(x = group, y = value, fill = group)
               ) +
             geom_bar(
-              stat="identity"
+              stat = "identity"
               ) +
             theme(
               axis.text.x = element_text(angle = 45, hjust = 1)
-              )+
+              ) +
             scale_fill_manual(
               values = boastUtils::boastPalette,
               guide = "none"
-              )
-              
+              ) +
+            theme_bw()
           },
-          alt = "Bar Graph of Activities"
+          alt = "Bar Graph of Activities"  #Add break down instead to be more descriptive
         )
       }
     }
@@ -477,11 +433,11 @@ server <- function(input, output, session) {
     eventExpr = input$nextPage,
     handlerExpr = {
       if (currentQuestion() != 3) {
-        currentQuestion(currentQuestion()+1)
+        currentQuestion(currentQuestion() + 1)
         updateTabsetPanel(
           session = session,
           inputId = "quiz",
-          selected = paste0("Q",currentQuestion())
+          selected = paste0("Q", currentQuestion())
         )
       }
     }
@@ -493,11 +449,11 @@ server <- function(input, output, session) {
     eventExpr = input$prevPage,
     handlerExpr = {
       if (currentQuestion() != 1) {
-        currentQuestion(currentQuestion()-1)
+        currentQuestion(currentQuestion() - 1)
         updateTabsetPanel(
           session = session,
           inputId = "quiz",
-          selected = paste0("Q",currentQuestion())
+          selected = paste0("Q", currentQuestion())
         )
       }
     }
@@ -517,86 +473,40 @@ server <- function(input, output, session) {
           type = "warning",
           title = "Quiz Incomplete!",
           text = "Please finish the quiz before submitting!"
-      
         )
-        
       } else {
-        
-        if (!is.null(input$answerChoice1) && input$answerChoice1 == "Sleep") {
+        if (input$answerChoice1 == "Sleep") {
           currentScore(currentScore() + 1)
         }
-        if (!is.null(input$answerChoice2) && input$answerChoice2 == "Gym") {
+        if (input$answerChoice2 == "Gym") {
           currentScore(currentScore() + 1)
         }
-        if (!is.null(input$answerChoice3) && input$answerChoice3 == "Statistics") {
+        if (input$answerChoice3 == "Statistics") {
           currentScore(currentScore() + 1)
         }
-        
         sendSweetAlert(
           session = session,
           type = "success",
           title = "Quiz Complete!",
           text = paste0("Your Score: ", currentScore(), "/3")
         )
-        
         currentScore(currentScore() - currentScore())
-        resetQuiz()
-        
+        for (i in 1:3) {
+          updateRadioButtons(
+            session = session,
+            inputId = paste0("answerChoice", i),
+            selected = character(0)
+          )
+        } 
+        currentQuestion(1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q",currentQuestion())
+        )
       }
-      
     }
   )
-  
-  ## Quiz Reset Function ----
-  
-  resetQuiz <- function() {
-    updateRadioButtons(
-      session = session,
-      inputId = "answerChoice1",
-      label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the most time on?",
-      br(),
-      choices = c("Tennis","Sleep","Piano")
-    )
-    
-    updateRadioButtons(
-      session = session,
-      inputId = "answerChoice2",
-      label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the second-to-least 
-      time on?",
-      br(),
-      choices = c("Gym","Tennis","Sleep")
-    )
-    
-    updateRadioButtons(
-      session = session,
-      inputId = "answerChoice3", 
-      label = "According to the description on the Explore page,
-                      what is Sean majoring in?",
-      br(),
-      choices = c("Mathematics","Piano Performance","Statistics")
-    )
-    currentQuestion(1)
-    updateTabsetPanel(
-      session = session,
-      inputId = "quiz",
-      selected = paste0("Q",currentQuestion())
-    )
-    
-    
-  }
-    
-  ### Reset Button ----
-  observeEvent(
-    eventExpr = input$resetPage,
-    handlerExpr = {
-      
-      resetQuiz() 
-      
-    }
-  )
-  
 }
 
 # Boast App Call ----
