@@ -115,6 +115,7 @@ ui <- list(
                     alt = "Headshot of Sean Burke"
                   )
                 ),
+                br(),
                 tags$figure(
                   align = "center",
                   tags$img(
@@ -131,6 +132,7 @@ ui <- list(
                   addition to sports, he also enjoys playing piano. His favorite 
                   genre to play is Romantic Classical.")
               ),
+              #####Second tab ----
               tabPanel(
                 title = "Data Visualization",
                 br(),
@@ -181,73 +183,137 @@ ui <- list(
           h2("Quick Quiz"),
           p("Answer the three multiple choice questions to the best of your ability!"),
           br(),
-          fluidRow(
-            column(
-              width = 5,
-              offset = 0,
-              wellPanel(
-                tabsetPanel(
-                  id = "quiz",
-                  type = "hidden",
-                  tabPanel(
-                    title = "First Question",
-                    value = "Q1",
-                    br(),
-                    h3("Question 1"),
+          tabsetPanel(
+            id = "quiz",
+            type = "hidden",
+            tabPanel(
+              title = "First Question",
+              value = "Q1",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
                     radioButtons(
                       inputId = "answerChoice1",
-                      label = "Looking at the Data Visualization on the Explore
-                      page, what activity does Sean spend the most time on?", #dont put questions in label. put in parg.
+                      label = "Choose one answer!",
                       choices = c("Tennis", "Sleep", "Piano"),
                       selected = character(0)
                     )
-                  ),
-                  tabPanel(
-                    title = "Second Question",
-                    value = "Q2",
+                  )
+                ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
                     br(),
-                    h3("Question 2"),
-                    radioButtons(
-                      inputId = "answerChoice2",
-                      label = "Looking at the Data Visualization on the Explore 
-                      page, what activity does Sean spend the second-to-least time 
-                      on?",
-                      choices = c("Gym", "Tennis", "Sleep"),
-                      selected = character(0)
-                    )
-                  ),
-                  tabPanel(
-                    title = "Third Question",
-                    value = "Q3",
+                    h3("Question 1"),
+                    p("Looking at the Data Visualization on the Explore page, 
+                      what activity does Sean spend the most time on?"),
                     br(),
-                    h3("Question 3"),
-                    radioButtons(
-                      inputId = "answerChoice3",
-                      label = "According to the description on the Explore page,
-                      what is Sean majoring in?",
-                      choices = c("Mathematics", "Piano Performance", "Statistics"),
-                      selected = character(0)
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "vis.png",
+                        width = "40%",
+                        alt = "View of Visualization Tab"
+                      )
                     )
                   )
                 )
               )
             ),
-            column(
-              width = 7,
-              offset = 0,
-              div(
-                tags$figure(
-                  align = "center",
-                  tags$img(
-                    src = "vis.png",
-                    width = "75%",
-                    alt = "View of Visualization Tab"
+            tabPanel(
+              title = "Second Question",
+              value = "Q2",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
+                    radioButtons(
+                      inputId = "answerChoice2",
+                      label = "Choose one answer!",
+                      choices = c("Gym", "Tennis", "Sleep"),
+                      selected = character(0)
+                    )
                   )
                 ),
-                br(),
-                h3("Question #"),
-                p("question text")
-              ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
+                    br(),
+                    h3("Question 2"),
+                    p("Looking at the Data Visualization on the Explore page, 
+                      what activity does Sean spend the second-to-least time on?"),
+                    br(),
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "vis.png",
+                        width = "40%",
+                        alt = "View of Visualization Tab"
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            tabPanel(
+              title = "Third Question",
+              value = "Q3",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
+                    radioButtons(
+                      inputId = "answerChoice3",
+                      label = "Choose one answer!",
+                      choices = c("Mathematics", "Piano Performance", "Statistics"),
+                      selected = character(0)
+                    )
+                  )
+                ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
+                    br(),
+                    h3("Question 3"),
+                    p("According to the description on the Explore page, what is 
+                      Sean majoring in?"),
+                    br(),
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "piano.png",
+                        width = "50%",
+                        alt = "View of Visualization Tab"
+                      )
+                    )
+                  )
+                )
+              )
             )
           ),
           div(
@@ -386,7 +452,10 @@ server <- function(input, output, session) {
               text = element_text(size = 18)
               )
           },
-          alt = "Pie Chart of Activities" #Add break down instead to be more descriptive
+          alt = "Pie Chart of activities measured in average time in hours per day.
+          6 hours of Sleep, 4 hours of research, 3 hours of piano, 2.5 hours of
+          Part-Time work, 2.5 hours of Eating, 2 hours of TV, 1.5 hours of gym, 
+          1 hour of Tennis."
         )
       } else {
         output$activityPlot <- renderPlot(
@@ -407,7 +476,10 @@ server <- function(input, output, session) {
               ) +
             theme_bw()
           },
-          alt = "Bar Graph of Activities"  #Add break down instead to be more descriptive
+          alt = "Bar Graph of activities measured in average time in hours per day.
+          6 hours of Sleep, 4 hours of research, 3 hours of piano, 2.5 hours of
+          Part-Time work, 2.5 hours of Eating, 2 hours of TV, 1.5 hours of gym, 
+          1 hour of Tennis."
         )
       }
     }
