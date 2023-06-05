@@ -4,23 +4,30 @@ library(shinydashboard)
 library(shinyBS)
 library(shinyWidgets)
 library(boastUtils)
+library(ggplot2)
 
 # Load additional dependencies and setup functions
 # source("global.R")
 
+# Activity data ----
+activity <- data.frame(
+  group = c("Gym", "Eating", "Sleep", "Piano", "Tennis", "TV", "Part-Time", "Research"),
+  value = c(1.5,2.5,6,3,1,2,2.5,4)
+)
+
 # Define UI for App ----
 ui <- list(
-  ## Create the app page ----
+  ## app page ----
   dashboardPage(
     skin = "blue",
-    ### Create the app header ----
+    ### app header ----
     dashboardHeader(
-      title = "App Template", # You may use a shortened form of the title here
+      title = "Introduce Sean",
       titleWidth = 250,
       tags$li(class = "dropdown", actionLink("info", icon("info"))),
       tags$li(
         class = "dropdown",
-        boastUtils::surveyLink(name = "App_Template")
+        boastUtils::surveyLink(name = "Introducing_Sean_Burke")
       ),
       tags$li(
         class = "dropdown",
@@ -29,18 +36,14 @@ ui <- list(
         )
       )
     ),
-    ### Create the sidebar/left navigation menu ----
+    ### Sidebar/left navigation menu ----
     dashboardSidebar(
       width = 250,
       sidebarMenu(
         id = "pages",
         menuItem("Overview", tabName = "overview", icon = icon("gauge-high")),
-        menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
-        menuItem("Example", tabName = "example", icon = icon("book-open-reader")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
         menuItem("Challenge", tabName = "challenge", icon = icon("gears")),
-        menuItem("Game", tabName = "game", icon = icon("gamepad")),
-        menuItem("Wizard", tabName = "wizard", icon = icon("hat-wizard")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
@@ -51,44 +54,38 @@ ui <- list(
     ### Create the content ----
     dashboardBody(
       tabItems(
-        #### Set up the Overview Page ----
+        #### Overview Page ----
         tabItem(
           tabName = "overview",
           withMathJax(),
-          h1("Sample Application for BOAST Apps"), # This should be the full name.
-          p("This is a sample Shiny application for BOAST. Remember, this page
-            will act like the front page (home page) of your app. Thus you will
-            want to have this page catch attention and describe (in general terms)
-            what the user can do in the rest of the app."),
+          h1("Introducing Sean Burke"), # This should be the full name.
+          p("This is a Shiny application to introduce Sean Burke."),
           h2("Instructions"),
-          p("This information will change depending on what you want to do."),
+          p("The instructions below provide guidence on how to navigate the app."),
           tags$ol(
-            tags$li("Review any prerequiste ideas using the Prerequistes tab."),
-            tags$li("Explore the Exploration Tab."),
-            tags$li("Challenge yourself."),
-            tags$li("Play the game to test how far you've come.")
+            tags$li("Click on the 'Explore' button to learn about Sean."),
+            tags$li("Click on the 'Challenge' button to go to the Challenge page."),
+            tags$li("Answer the given multiple choice questions."),
+            tags$li("Hit the 'Submit' button after answering all the questions to 
+                    receive score.")
           ),
-          ##### Go Button--location will depend on your goals
           div(
             style = "text-align: center;",
             bsButton(
-              inputId = "go1",
-              label = "GO!",
+              inputId = "goToExplore",
+              label = "Explore!",
               size = "large",
               icon = icon("bolt"),
               style = "default"
             )
           ),
-          ##### Create two lines of space
           br(),
           br(),
           h2("Acknowledgements"),
           p(
-            "This version of the app was developed and coded by Neil J.
-            Hatfield  and Robert P. Carey, III.",
+            "This version of the app was developed and coded by Sean Burke",
             br(),
-            "We would like to extend a special thanks to the Shiny Program
-            Students.",
+            br(),
             br(),
             br(),
             "Cite this app as:",
@@ -96,120 +93,296 @@ ui <- list(
             citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 11/8/2022 by NJH.")
+            div(class = "updated", "Last Update: 05/24/2023 by SB.")
           )
         ),
-        #### Set up the Prerequisites Page ----
-        tabItem(
-          tabName = "prerequisites",
-          withMathJax(),
-          h2("Prerequisites"),
-          p("In order to get the most out of this app, please review the
-            following:"),
-          tags$ul(
-            tags$li("Pre-req 1--Technical/Conceptual Prerequisites are ideas that
-                    users need to have in order to engage with your app fully."),
-            tags$li("Pre-req 2--Contextual Prerequisites refer to any information
-                    about a context in your app that will enrich a user's
-                    understandings."),
-            tags$li("Pre-req 3"),
-            tags$li("Pre-req 4")
-          ),
-          p("Notice the use of an unordered list; users can move through the
-            list any way they wish."),
-          box(
-            title = strong("Null Hypothesis Significance Tests (NHSTs)"),
-            status = "primary",
-            collapsible = TRUE,
-            collapsed = TRUE,
-            width = '100%',
-            "In the Confirmatory Data Analysis tradition, null hypothesis
-            significance tests serve as a critical tool to confirm that a
-            particular theoretical model describes our data and to make a
-            generalization from our sample to the broader population
-            (i.e., make an inference). The null hypothesis often reflects the
-            simpler of two models (e.g., 'no statistical difference',
-            'there is an additive difference of 1', etc.) that we will use to
-            build a sampling distribution for our chosen estimator. These
-            methods let us test whether our sample data are consistent with this
-            simple model (null hypothesis)."
-          ),
-          box(
-            title = strong(tags$em("p"), "-values"),
-            status = "primary",
-            collapsible = TRUE,
-            collapsed = FALSE,
-            width = '100%',
-            "The probability that our selected estimator takes on a value at
-            least as extreme as what we observed given our null hypothesis. If
-            we were to carry out our study infinitely many times and the null
-            hypothesis accurately modeled what we're studying, then we would
-            expect for our estimator to produce a value at least as extreme as
-            what we have seen 100*(p-value)% of the time. The larger the
-            p-value, the more often we would expect our estimator to take on a
-            value at least as extreme as what we've seen; the smaller, the less
-            often."
-          )
-        ),
-        #### Note: you must have at least one of the following pages. You might
-        #### have more than one type and/or more than one of the same type. This
-        #### will be up to you and the goals for your app.
-        #### Set up an Explore Page ----
+        #### Explore Page ----
         tabItem(
           tabName = "explore",
-          withMathJax(),
-          h2("Explore the Concept"),
-          p("This page should include something for the user to do, the more
-            active and engaging, the better. The purpose of this page is to help
-            the user build a productive understanding of the concept your app
-            is dedicated to."),
-          p("Common elements include graphs, sliders, buttons, etc."),
-          p("The following comes from the NHST Caveats App:"),
+          h2("About Sean Burke"),
+          fluidPage(
+            tabsetPanel(
+              #####First tab ----
+              tabPanel(
+                title = "Basic Info",
+                br(),
+                h3("Information"),
+                tags$figure(
+                  align = "center",
+                  tags$img(
+                    src = "profile.png",
+                    width = "50%", #add percentage
+                    alt = "Headshot of Sean Burke"
+                  )
+                ),
+                br(),
+                tags$figure(
+                  align = "center",
+                  tags$img(
+                    src = "piano.png",
+                    width = "50%",
+                    alt = "Sean playing the Piano"
+                  )
+                ),
+                br(),
+                p("Sean is an upcoming Second year at Penn State University 
+                  majoring in Statistics. He is currently pursuing the Statistics 
+                  and Computation route within the major. In his free time, Sean
+                  often likes to play sports such as soccer and tennis. In 
+                  addition to sports, he also enjoys playing piano. His favorite 
+                  genre to play is Romantic Classical.")
+              ),
+              #####Second tab ----
+              tabPanel(
+                title = "Data Visualization",
+                br(),
+                h3("Data Visualization"),
+                fluidRow(
+                  column(
+                    width = 4,
+                    offset = 0,
+                    wellPanel(
+                      selectInput(
+                        inputId = "plotType",
+                        label = "Select a plot",
+                        choices = c("Pie Chart", "Bar Chart")
+                      ),
+                      bsButton(
+                        inputId = "createPlot",
+                        label = "Plot!",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
+                  ),
+                  column(
+                    width = 8,
+                    offset = 0,
+                    plotOutput(outputId = "activityPlot")
+                  )
+                )
+              ),
+            )
+          ),
+          ##### Go Button--location will depend on your goals
+          div(
+            style = "text-align: center;",
+            bsButton(
+              inputId = "goToChallenge",
+              label = "Challenge!",
+              size = "large",
+              icon = icon("bolt"),
+              style = "default"
+            )
+          ),
         ),
-        #### Set up a Challenge Page ----
+        #### Challenge Page ----
         tabItem(
           tabName = "challenge",
           withMathJax(),
-          h2("Challenge Yourself"),
-          p("The general intent of a Challenge page is to have the user take
-            what they learned in an Exploration and apply that knowledge in new
-            contexts/situations. In essence, to have them challenge their
-            understanding by testing themselves."),
-          p("What this page looks like will be up to you. Something you might
-            consider is to re-create the tools of the Exploration page and then
-            a list of questions for the user to then answer.")
+          h2("Quick Quiz"),
+          p("Answer the three multiple choice questions to the best of your ability!"),
+          br(),
+          tabsetPanel(
+            id = "quiz",
+            type = "hidden",
+            tabPanel(
+              title = "First Question",
+              value = "Q1",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
+                    radioButtons(
+                      inputId = "answerChoice1",
+                      label = "Choose one answer!",
+                      choices = c("Tennis", "Sleep", "Piano"),
+                      selected = character(0)
+                    )
+                  )
+                ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
+                    br(),
+                    h3("Question 1"),
+                    p("Looking at the Data Visualization on the Explore page, 
+                      what activity does Sean spend the most time on?"),
+                    br(),
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "vis.png",
+                        width = "40%",
+                        alt = "View of Visualization Tab"
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            tabPanel(
+              title = "Second Question",
+              value = "Q2",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
+                    radioButtons(
+                      inputId = "answerChoice2",
+                      label = "Choose one answer!",
+                      choices = c("Gym", "Tennis", "Sleep"),
+                      selected = character(0)
+                    )
+                  )
+                ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
+                    br(),
+                    h3("Question 2"),
+                    p("Looking at the Data Visualization on the Explore page, 
+                      what activity does Sean spend the second-to-least time on?"),
+                    br(),
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "vis.png",
+                        width = "40%",
+                        alt = "View of Visualization Tab"
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            tabPanel(
+              title = "Third Question",
+              value = "Q3",
+              fluidRow(
+                column(
+                  width = 5,
+                  offset = 0,
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  wellPanel(
+                    radioButtons(
+                      inputId = "answerChoice3",
+                      label = "Choose one answer!",
+                      choices = c("Mathematics", "Piano Performance", "Statistics"),
+                      selected = character(0)
+                    )
+                  )
+                ),
+                column(
+                  width = 7,
+                  offset = 0,
+                  div(
+                    br(),
+                    h3("Question 3"),
+                    p("According to the description on the Explore page, what is 
+                      Sean majoring in?"),
+                    br(),
+                    tags$figure(
+                      align = "left",
+                      tags$img(
+                        src = "piano.png",
+                        width = "50%",
+                        alt = "View of Visualization Tab"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          ),
+          div(
+            style = "text-align: left;",
+            br(),
+            br(),
+            bsButton(
+              inputId = "prevPage",
+              icon = icon("backward"),
+              label =  "Previous!",
+              size = "large",
+              style = "default"
+            ),
+            bsButton(
+              inputId = "nextPage",
+              label =  "Next!",
+              icon = icon("forward"),
+              size = "large",
+              style = "default"
+            ),
+            bsButton(
+              inputId = "submitQuiz",
+              label = "Submit!",
+              size = "large",
+              style = "default"
+            )
+          )
         ),
-        #### Set up a Game Page ----
-        tabItem(
-          tabName = "game",
-          withMathJax(),
-          h2("Practice/Test Yourself with [Type of Game]"),
-          p("On this type of page, you'll set up a game for the user to play.
-            Game types include Tic-Tac-Toe, Matching, and a version Hangman to
-            name a few. If you have ideas for new game type, please let us know.")
-        ),
-        #### Set up a Wizard Page ----
-        tabItem(
-          tabName = "wizard",
-          withMathJax(),
-          h2("Wizard"),
-          p("This page will have a series of inputs and questions for the user to
-            answer/work through in order to have the app create something. These
-            types of Activity pages are currently rare as we try to avoid
-            creating 'calculators' in the BOAST project.")
-        ),
-        #### Set up the References Page ----
+        #### References Page ----
         tabItem(
           tabName = "references",
           withMathJax(),
           h2("References"),
-          p("You'll need to fill in this page with all of the appropriate
-            references for your app."),
           p(
             class = "hangingindent",
             "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
             https://CRAN.R-project.org/package=shinyBS"
+          ),
+          p(
+            class = "hangingindent",
+            "Carey, R. and Hatfield., N. J. (2023). boastUtils: BOAST utilities.
+            (v0.1.11.2). [R Package]. Available from
+            https://github.com/EducationShinyappTeam/boastUtils"
+          ),
+          p(
+            class = "hangingindent",
+            "Chang, W. and Borges Ribeio, B. (2021). shinydashboard: Create dashboards
+            with 'Shiny'. (v0.7.2). [R Package]. Available from
+            https://CRAN.R-project.org/package=shinydashboard"
+          ),
+          p(
+            class = "hangingindent",
+            "Chang, W., Cheng, J., Allaire, J.J., Sievert, C., Schloerke, B.,
+            Xie, Y., Allen, J., McPherson, J., Dipert, A., and Borges, B. (2022).
+            shiny: Web application framework for R. (v1.7.4). [R Package].
+            Available from https://CRAN.R-project.org/package=shiny"
+          ),
+          p(
+            class = "hangingindent",
+            "Perrier, V., Meyer, F., and Granjon, D. (2023). shinyWidgets: Custom
+            inputs widgets for shiny. (v0.7.6). [R Package]. Availble from
+            https://CRAN.R-project.org/package=shinyWidgets"
+          ),
+          p(
+            class = "hangingindent",
+            "Wickham, H. (2016). ggplot2: Elegant graphics for data analysis.
+            (v3.4.2). [R Package]. New York:Springer-Verlag. Available from
+            https://ggplot2.tidyverse.org"
           ),
           br(),
           br(),
@@ -223,7 +396,7 @@ ui <- list(
 
 # Define server logic ----
 server <- function(input, output, session) {
-
+  
   ## Set up Info button ----
   observeEvent(
     eventExpr = input$info,
@@ -232,12 +405,180 @@ server <- function(input, output, session) {
         session = session,
         type = "info",
         title = "Information",
-        text = "This App Template will help you get started building your own app"
+        text = "This App will help you get to know Sean."
       )
     }
   )
-
-
+  
+  ### Explore button ----
+  observeEvent(
+    eventExpr = input$goToExplore,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "explore"
+      )
+    }
+  )
+  
+ ### Activity Pot ----
+  observeEvent(
+    eventExpr = input$createPlot,
+    handlerExpr = {
+      if (input$plotType == "Pie Chart") {
+        output$activityPlot <- renderPlot(
+          expr = {
+            ggplot(
+              data = activity, 
+              mapping = aes(x = "", y = value, fill = group)
+              ) +
+            geom_bar(
+              stat = "identity", 
+              width = 1, 
+              color = "white"
+              ) +
+            coord_polar("y", start = 0) +
+            theme_void() + 
+            scale_fill_manual(
+              values = boastUtils::boastPalette
+            ) + 
+            geom_text(
+              aes(label = value), 
+              position = position_stack(vjust = 0.5), 
+              color = "white"
+              ) +
+            theme(
+              text = element_text(size = 18)
+              )
+          },
+          alt = "Pie Chart of activities measured in average time in hours per day.
+          6 hours of Sleep, 4 hours of research, 3 hours of piano, 2.5 hours of
+          Part-Time work, 2.5 hours of Eating, 2 hours of TV, 1.5 hours of gym, 
+          1 hour of Tennis."
+        )
+      } else {
+        output$activityPlot <- renderPlot(
+          expr = {
+            ggplot(
+              data = activity, 
+              mapping = aes(x = group, y = value, fill = group)
+              ) +
+            geom_bar(
+              stat = "identity"
+              ) +
+            theme(
+              axis.text.x = element_text(angle = 45, hjust = 1)
+              ) +
+            scale_fill_manual(
+              values = boastUtils::boastPalette,
+              guide = "none"
+              ) +
+            theme_bw()
+          },
+          alt = "Bar Graph of activities measured in average time in hours per day.
+          6 hours of Sleep, 4 hours of research, 3 hours of piano, 2.5 hours of
+          Part-Time work, 2.5 hours of Eating, 2 hours of TV, 1.5 hours of gym, 
+          1 hour of Tennis."
+        )
+      }
+    }
+  )
+  
+  ### Challenge button ----
+  observeEvent(
+    eventExpr = input$goToChallenge,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "challenge"
+      )
+    }
+  )
+  
+  # Current Question Counter----
+  currentQuestion <- reactiveVal(1)
+  
+  ### Next Button ----
+  observeEvent(
+    eventExpr = input$nextPage,
+    handlerExpr = {
+      if (currentQuestion() != 3) {
+        currentQuestion(currentQuestion() + 1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q", currentQuestion())
+        )
+      }
+    }
+  )
+  
+  ### Previous Button ----
+  
+  observeEvent(
+    eventExpr = input$prevPage,
+    handlerExpr = {
+      if (currentQuestion() != 1) {
+        currentQuestion(currentQuestion() - 1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q", currentQuestion())
+        )
+      }
+    }
+  )
+  
+  #Current Score for the Quiz----
+  currentScore <- reactiveVal(0)
+  
+  ### Submit Button ----
+  observeEvent(
+    eventExpr = input$submitQuiz,
+    handlerExpr = {
+      if (is.null(input$answerChoice1) | is.null(input$answerChoice2) |
+          is.null(input$answerChoice3) ) {
+        sendSweetAlert(
+          session = session,
+          type = "warning",
+          title = "Quiz Incomplete!",
+          text = "Please finish the quiz before submitting!"
+        )
+      } else {
+        if (input$answerChoice1 == "Sleep") {
+          currentScore(currentScore() + 1)
+        }
+        if (input$answerChoice2 == "Gym") {
+          currentScore(currentScore() + 1)
+        }
+        if (input$answerChoice3 == "Statistics") {
+          currentScore(currentScore() + 1)
+        }
+        sendSweetAlert(
+          session = session,
+          type = "success",
+          title = "Quiz Complete!",
+          text = paste0("Your Score: ", currentScore(), "/3")
+        )
+        currentScore(currentScore() - currentScore())
+        for (i in 1:3) {
+          updateRadioButtons(
+            session = session,
+            inputId = paste0("answerChoice", i),
+            selected = character(0)
+          )
+        } 
+        currentQuestion(1)
+        updateTabsetPanel(
+          session = session,
+          inputId = "quiz",
+          selected = paste0("Q",currentQuestion())
+        )
+      }
+    }
+  )
 }
 
 # Boast App Call ----
